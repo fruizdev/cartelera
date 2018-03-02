@@ -12,30 +12,38 @@
                 v-model="filter"
                 placeholder="Introduce el nombre de tu actividad">
             </div>
-            <p class="uk-text-small uk-text-muted">Actualmente solo se pueden realizar búsquedas por nombre de actividad.</p>
           </div>
         </form>
-      </div>
-    </div>
 
-    <div class="uk-section uk-section-muted">
-      <div class="uk-container uk-container-center uk-text-center">
-        <label class="uk-form-label uk-text-large">Listado de actividades:</label>
-        <ul class="uk-list">
-          <li v-for="(item, index) in filteredActividad"
+        <div v-if="filteredActividad == 0">
+          <p class="uk-text-small uk-text-muted uk-text-left">No se encontraron actividades.</p>
+        </div>
+        <div v-else-if="filteredActividad == 1">
+          <p class="uk-text-small uk-text-muted uk-text-left">{{filteredActividad.length}} actividad encontrada.</p>
+        </div>
+        <div v-else>
+          <p class="uk-text-small uk-text-muted uk-text-left">{{filteredActividad.length}} actividades encontradas.</p>
+        </div>
+        
+        <div class="pad-top">
+          <div class="uk-grid-match uk-grid-small uk-text-center" uk-grid>  
+            <div class="uk-width-1-2@m"
+            v-for="(item, index) in filteredActividad"
             :key="index"
             @click.prevent="goToActividad(item)">
-            <section v-if="(index % 2) === 0">
-              <actividad-card-right :actividad="item"></actividad-card-right>
-            </section>
-            <section v-else>
-              <actividad-card-left :actividad="item"></actividad-card-left>
-            </section>
-          </li>
-        </ul>
+              <actividad-card-right v-if="(index % 2) === 0" :actividad="item"></actividad-card-right>
+              <actividad-card-left v-else :actividad="item"></actividad-card-left>
+            </div>
+          </div>
+
+          <div class="pad-top">
+            <button v-if="filter === ''" class="uk-button uk-button-secondary" @click.prevent="showMoreActividades">Cargar más actividades</button>
+          </div>
+
+        </div>
+
       </div>
     </div>
-    
   </section>
 </template>
 
@@ -50,11 +58,12 @@ export default {
   data() {
     return {
     actividades: [],
-    filter: ''
+    filter: '',
+    limit: 12
     }
   },
 created () {
-    this.loadActividades();
+    this.loadActividades()
   },
   computed: {
     filteredActividad () {
@@ -67,6 +76,9 @@ created () {
   methods: {
     loadActividades: function () {
       getActividades().then(data => this.actividades = data);
+    },
+    showMoreActividades () {
+      this.limit += 12
     },
     goToActividad (actividad) {
       this.$router.push({
@@ -86,3 +98,8 @@ created () {
 }
 </script>
 
+<style scoped>
+.pad-top {
+  margin-top: 30px !important;
+}
+</style>
