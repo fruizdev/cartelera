@@ -1,17 +1,24 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { getActividades, getCategorias } from '@/services/api'
+import { getProximasActividades, getSegmentoActividades, getBusquedaActividades, getCategorias, getBusquedaCategoria } from '@/services/api'
 
 Vue.use(Vuex);
 
-export const ADD_PROXIMOS_EVENTOS = 'ADD_PROXIMOS_EVENTOS';
-export const ADD_EVENTOS = 'ADD_EVENTOS';
-export const ADD_CATEGORIAS = 'ADD_CATEGORIAS';
-
 const state = {
-    proximosEventos: [],
-    eventos: [],
-    categorias: []
+    proximasActividades: [],
+    actividades: [],
+    contadorActividades: 0,
+    limiteActividades: 10,
+    totalActividades: 0,
+    busqueda: [],
+    contadorBusqueda: 0,
+    limiteBusqueda: 10,
+    totalBusqueda: 0,
+    categorias: [],
+    busquedaCategoria: [],
+    contadorBusquedaCategoria: 0,
+    limiteBusquedaCategoria: 10,
+    totalBusquedaCategoria: 0
 };
 
 const getters = {
@@ -19,29 +26,109 @@ const getters = {
 };
 
 const actions = {
-    async fetchProximosEventos(context) {
-        return getActividades()
-            .then(proximosEventos => context.commit(ADD_PROXIMOS_EVENTOS, proximosEventos));
-   },
-    async fetchEventos(context) {
-        return getActividades()
-            .then(eventos => context.commit(ADD_EVENTOS, eventos));
+    loadProximasActividades(context) {
+        return getProximasActividades()
+            .then(proximasActividades => context.commit('updateProximasActividades', proximasActividades))
+            .then(function() {
+                document.querySelector('.uk-spinner').style.display = 'none';
+            });
     },
-    async fetchCategorias(context) {
+    loadActividades(context) {
+        return getSegmentoActividades(state.limiteActividades, state.contadorActividades)
+            .then(actividades => context.commit('updateActividades', actividades))
+            .then(function() {
+                document.getElementById("more").disabled = false;
+            });
+    },
+    loadBusquedaActividades(context, filter) {
+        return getBusquedaActividades(filter, state.limiteBusqueda, 0)
+            .then(busqueda => context.commit('updateBusquedaActividades', busqueda))
+            .then(function() {
+                document.getElementById("moreBusqueda").disabled = false;
+            });
+    },
+    loadMasBusquedaActividades(context, filter) {
+        return getBusquedaActividades(filter, state.limiteBusqueda, state.contadorBusqueda)
+            .then(busqueda => context.commit('updateMasBusqueda', busqueda))
+            .then(function() {
+                document.getElementById("moreBusqueda").disabled = false;
+            });
+    },
+    loadBusquedaReset(context) {
+        context.commit('updateBusquedaReset')
+    },
+    loadCategorias(context) {
         return getCategorias()
-            .then(categorias => context.commit(ADD_CATEGORIAS, categorias));
-    }
+            .then(categorias => context.commit('updateCategorias', categorias));
+    },
+    loadBusquedaCategoria(context, select) {
+        return getBusquedaCategoria(select, state.limiteBusquedaCategoria, 0)
+            .then(busquedaCategoria => context.commit('updateBusquedaCategoria', busquedaCategoria))
+    },
+    loadMasBusquedaCategoria(context, select) {
+        return getBusquedaCategoria(select, state.limiteBusquedaCategoria, state.contadorBusquedaCategoria)
+            .then(busquedaCategoria => context.commit('updateMasBusquedaCategoria', busquedaCategoria))
+            .then(function() {
+                document.getElementById("moreCategoria").disabled = false;
+            });
+    },
+    loadBusquedaCategoriaReset(context) {
+        context.commit('updateBusquedaCategoriaReset')
+    },
 };
 
 const mutations = {
-    [ADD_PROXIMOS_EVENTOS](state, proximosEventos) {
-        state.proximosEventos = proximosEventos;
+    updateProximasActividades(state, proximasActividades) {
+        state.proximasActividades = proximasActividades;
     },
-    [ADD_EVENTOS](state, eventos) {
-        state.eventos = eventos;
+    updateActividades(state, actividades) {
+        state.totalActividades = actividades.total;
+        if(state.contadorActividades === 0){
+            state.actividades = actividades.resultados;
+            state.contadorActividades = state.contadorActividades + 10;
+        }else{
+            actividades.resultados.forEach(function (value, key) {
+                state.actividades.push(value);
+            });
+            state.contadorActividades = state.contadorActividades + 10;
+        }
     },
-    [ADD_CATEGORIAS](state, categorias) {
+    updateBusquedaActividades(state, busqueda) {
+        state.totalBusqueda = busqueda.total;
+        state.busqueda = busqueda.resultados;
+        state.contadorBusqueda = 10;
+    },
+    updateMasBusqueda(state, busqueda) {
+        busqueda.resultados.forEach(function (value, key) {
+            state.busqueda.push(value);
+        });
+        state.contadorBusqueda = state.contadorBusqueda + 10;
+    },
+    updateBusquedaReset(state) {
+        state.busqueda = []
+        state.contadorBusqueda = 0
+        state.limiteBusqueda = 10
+        state.totalBusqueda = 0
+    },
+    updateCategorias(state, categorias) {
         state.categorias = categorias;
+    },
+    updateBusquedaCategoria(state, busquedaCategoria) {
+        state.totalBusquedaCategoria = busquedaCategoria.total;
+        state.busquedaCategoria = busquedaCategoria.resultados;
+        state.contadorBusquedaCategoria = 10;
+    },
+    updateMasBusquedaCategoria(state, busquedaCategoria) {
+        busquedaCategoria.resultados.forEach(function (value, key) {
+            state.busquedaCategoria.push(value);
+        });
+        state.contadorBusquedaCategoria = state.contadorBusquedaCategoria + 10;
+    },
+    updateBusquedaCategoriaReset(state) {
+        state.busquedaCategoria = []
+        state.contadorBusquedaCategoria = 0
+        state.limiteBusquedaCategoria = 10
+        state.totalBusquedaCategoria = 0
     }
 }
 

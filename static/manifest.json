@@ -1,0 +1,20 @@
+{
+  "name": "Cartelera Corporación Cultural Puerto Montt",
+  "short_name": "Cartelera",
+  "icons": [
+    {
+      "src": "../static/img/icons-ccpm/favicon-ccpm-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../static/img/icons-ccpm/icon-ccpm-270x270.png",
+      "sizes": "270x270",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "../",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#8CB51D"
+}
