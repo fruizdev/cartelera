@@ -5,30 +5,42 @@ import InicioView from '@/views/Inicio'
 import ActividadesView from '@/views/Actividades'
 import ActividadView from '@/views/Actividad'
 import CategoriasView from '@/views/Categorias'
+import VisitaGuiadaView from '@/views/VisitaGuiada'
+import MapasView from '@/views/Mapas'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/cartelera/',
+      path: '/',
       name: 'Inicio',
       component: InicioView
     },
     {
-      path: '/cartelera/actividades',
+      path: '/actividades',
       name: 'Actividades',
       component: ActividadesView
     },
     {
-      path: '/cartelera/actividad/:id',
+      path: '/actividades/:id',
       name: 'Actividad',
       component: ActividadView
     },
     {
-      path: '/cartelera/categorias',
+      path: '/categorias',
       name: 'Categorias',
       component: CategoriasView
+    },
+    {
+      path: '/visitaguiada',
+      name: 'VisitaGuiada',
+      component: VisitaGuiadaView
+    },
+    {
+      path: '/mapas',
+      name: 'Mapas',
+      component: MapasView
     }
   ],
   mode: 'history',

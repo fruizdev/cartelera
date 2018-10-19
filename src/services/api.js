@@ -2,7 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 moment.locale('es')
 
-const API_URL = 'https://sgcc.cl/cartelera-api/public/api'
+const API_URL = 'https://www.culturapuertomontt.cl/inicio/wp-json/cartelera/v1'
+//const API_URL = 'http://localhost/api-ccpm/public/index.php/api'
 
 function horasDias(horas){
     var cont = 1;
@@ -61,6 +62,9 @@ function getProximasActividades(){
             element.fechaLAnzamiento = moment(element.Creado_El).fromNow()
             element.duracion = duracionEvento(element.Fecha_ini, element.Fecha_fin)
             element.fecha_inicio_formato = moment(element.Fecha_ini).format('DD/MM/YYYY')
+            element.fecha_inicio_formato_day = moment(element.Fecha_ini).format('DD')
+            element.fecha_inicio_formato_month = moment(element.Fecha_ini).format('MMMM')
+            element.fecha_inicio_formato_year = moment(element.Fecha_ini).format('YYYY')
         });
         return response.data;
     })
@@ -80,6 +84,9 @@ function getSegmentoActividades(limite, inicio){
             element.fechaLAnzamiento = moment(element.Creado_El).fromNow()
             element.duracion = duracionEvento(element.Fecha_ini, element.Fecha_fin)
             element.fecha_inicio_formato = moment(element.Fecha_ini).format('DD/MM/YYYY')
+            element.fecha_inicio_formato_day = moment(element.Fecha_ini).format('DD')
+            element.fecha_inicio_formato_month = moment(element.Fecha_ini).format('MMMM')
+            element.fecha_inicio_formato_year = moment(element.Fecha_ini).format('YYYY')
         });
         return response.data;
     })
@@ -99,6 +106,9 @@ function getBusquedaActividades(texto, limite, inicio){
             element.fechaLAnzamiento = moment(element.Creado_El).fromNow()
             element.duracion = duracionEvento(element.Fecha_ini, element.Fecha_fin)
             element.fecha_inicio_formato = moment(element.Fecha_ini).format('DD/MM/YYYY')
+            element.fecha_inicio_formato_day = moment(element.Fecha_ini).format('DD')
+            element.fecha_inicio_formato_month = moment(element.Fecha_ini).format('MMMM')
+            element.fecha_inicio_formato_year = moment(element.Fecha_ini).format('YYYY')
         });
         return response.data;
     })
@@ -128,6 +138,9 @@ function getBusquedaCategoria(texto, limite, inicio){
             element.fechaLAnzamiento = moment(element.Creado_El).fromNow()
             element.duracion = duracionEvento(element.Fecha_ini, element.Fecha_fin)
             element.fecha_inicio_formato = moment(element.Fecha_ini).format('DD/MM/YYYY')
+            element.fecha_inicio_formato_day = moment(element.Fecha_ini).format('DD')
+            element.fecha_inicio_formato_month = moment(element.Fecha_ini).format('MMMM')
+            element.fecha_inicio_formato_year = moment(element.Fecha_ini).format('YYYY')
         });
         return response.data;
     })

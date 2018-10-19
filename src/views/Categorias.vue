@@ -2,7 +2,7 @@
   <section>
     <div class="uk-section uk-section-muted">
       <div class="uk-container uk-container-center uk-text-center">
-        <form class="uk-form-stacked">
+        <form class="uk-form-stacked ">
           <div class="uk-margin">
             <label class="uk-form-label uk-text-large" for="form-stacked-select">Selecciona tu categoria preferida:</label>
             <div class="uk-form-controls">
@@ -18,7 +18,9 @@
 
         <div v-if="select !== ''">
           <div v-if="totalBusquedaCategoria == 0">
-            <p class="uk-text-small uk-text-muted uk-text-left">No se encontraron actividades.</p>
+            <div class="pad-bottom">
+              <p class="uk-text-small uk-text-muted uk-text-left">No se encontraron actividades.</p>
+            </div>
           </div>
           <div v-else-if="totalBusquedaCategoria == 1">
             <p class="uk-text-small uk-text-muted uk-text-left">{{totalBusquedaCategoria}} actividad encontrada.</p>
@@ -33,8 +35,8 @@
               v-for="(item, index) in busquedaCategoria"
               :key="index"
               @click.prevent="goToActividad(item)">
-                <actividad-card-right v-if="(index % 2) === 0" :actividad="item"></actividad-card-right>
-                <actividad-card-left v-else :actividad="item"></actividad-card-left>
+                <actividad-card-right v-if="(index % 2) === 0" :actividad="item" class="cursor"></actividad-card-right>
+                <actividad-card-left v-else :actividad="item" class="cursor"></actividad-card-left>
               </div>
             </div>
 
@@ -42,7 +44,11 @@
               <button class="uk-button uk-button-secondary" id="moreCategoria" @click.prevent="mostrarMasActividadesBusquedaCategoria">Cargar más actividades</button>
             </div>
           </div>
-
+  
+        </div>
+        <div v-else>
+          <div class="pad-bottom">
+          </div>
         </div>
       </div>
     </div>
@@ -58,7 +64,7 @@ export default {
   name: 'CategoriasView',
   data() {
     return {
-    select: ''
+      select: '',
     }
   },
   created () {
@@ -68,7 +74,7 @@ export default {
   watch: {
     select: function (newFilter, oldFilter) {
       this.getBusquedaCategoria()
-    }
+    },
   },
   computed: {
     categorias() {
@@ -117,5 +123,11 @@ export default {
 <style scoped>
 .pad-top {
   margin-top: 30px !important;
+}
+.pad-bottom {
+  padding-bottom: 300px;
+}
+.cursor {
+    cursor:pointer;
 }
 </style>
